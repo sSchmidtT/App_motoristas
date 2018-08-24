@@ -1,0 +1,75 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- A 'parent' preference, which enables/disables child preferences (below)
+         when checked/unchecked. -->
+    <PreferenceCategory
+        android:title="Social">
+        <EditTextPreference
+            android:capitalize="words"
+            android:defaultValue="@string/pref_default_display_name"
+            android:inputType="textCapWords"
+            android:key="Edit_preference_User"
+            android:maxLines="2"
+            android:selectAllOnFocus="true"
+            android:title="@string/pref_title_display_name" />
+        <EditTextPreference
+            android:defaultValue="Candeias do Jamari/RO"
+            android:key="edit_text_Filial"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Logado na unidade" />
+
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Notificações">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="notifications_new_message"
+            android:title="@string/pref_title_new_message_notifications"/>
+
+        <!-- Allows the user to choose a ringtone in the 'notification' category. -->
+        <!-- NOTE: This preference will be enabled only when the checkbox above is checked. -->
+        <!-- NOTE: RingtonePreference's summary should be set to its value by the activity code. -->
+        <RingtonePreference
+            android:defaultValue="content://settings/system/notification_sound"
+            android:dependency="notifications_new_message"
+            android:key="notifications_new_message_ringtone"
+            android:ringtoneType="notification"
+            android:title="@string/pref_title_ringtone"/>
+
+        <!-- NOTE: This preference will be enabled only when the checkbox above is checked. -->
+        <SwitchPreference
+            android:defaultValue="true"
+            android:dependency="notifications_new_message"
+            android:key="notifications_new_message_vibrate"
+            android:title="@string/pref_title_vibrate" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Versões">
+
+        <EditTextPreference
+            android:defaultValue="1.0"
+            android:key="edit_text_vsapp"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Versão App" />
+        <EditTextPreference
+            android:defaultValue="1"
+            android:key="edit_text_vsbanco"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Versão Banco de Dados" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="update_automatico"
+            android:title="Checar atualizações" />
+        <EditTextPreference
+            android:defaultValue="Default value"
+            android:key="edit_text_ult_att"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Última Verificação" />
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

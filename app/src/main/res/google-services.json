@@ -1,0 +1,117 @@
+{
+  "project_info": {
+    "project_number": "1053027080642",
+    "firebase_url": "https://appmotoristas.firebaseio.com",
+    "project_id": "appmotoristas",
+    "storage_bucket": "appmotoristas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1053027080642:android:4fbb49284d22f8a9",
+        "android_client_info": {
+          "package_name": "com.companyname.appname"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1053027080642-2mve9bcco9fb6b2c9vi908lpo96vfajd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbHk2yyuIm4T8QO_QKxPzLHp-_eGuG3h0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1053027080642:android:74c67d7b8f69dd22",
+        "android_client_info": {
+          "package_name": "com.grupoib3.schmidt.app_motorista"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1053027080642-2mve9bcco9fb6b2c9vi908lpo96vfajd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbHk2yyuIm4T8QO_QKxPzLHp-_eGuG3h0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1053027080642:android:583f5864ab7f0e6a",
+        "android_client_info": {
+          "package_name": "com.grupoib3.schmidt.mpark_motoristas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1053027080642-1s4rtkqp3m84d8op8eic4n0b90itjv3g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.grupoib3.schmidt.mpark_motoristas",
+            "certificate_hash": "0d42138cdc24c88cbad93e5bd9518d85f5e2d9a0"
+          }
+        },
+        {
+          "client_id": "1053027080642-2mve9bcco9fb6b2c9vi908lpo96vfajd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbHk2yyuIm4T8QO_QKxPzLHp-_eGuG3h0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1053027080642-2mve9bcco9fb6b2c9vi908lpo96vfajd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

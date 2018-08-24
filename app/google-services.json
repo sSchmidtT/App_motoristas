@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "814125599128",
+    "firebase_url": "https://app-motoristas-mpark.firebaseio.com",
+    "project_id": "app-motoristas-mpark",
+    "storage_bucket": "app-motoristas-mpark.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:814125599128:android:74c67d7b8f69dd22",
+        "android_client_info": {
+          "package_name": "com.grupoib3.schmidt.app_motorista"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "814125599128-uaacejp011pht05q7bj7s2psm9ha6f2m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEPELLBvXHiJOKYp5nCWtZMONpaF7K3dg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
