@@ -1,30 +1,21 @@
 package com.grupoib3.schmidt.app_motorista.Utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.SimpleTimeZone;
+import java.util.TimeZone;
 import java.util.regex.Pattern;
 
 public class TransformaDados {
 
-    public static Date ReturnData(String receiver){
+    public static Date ReturnData(String receiver, String _Utc) throws ParseException {
         try{
             Date calendar;
             if(receiver.length() > 0){
-                String[] sDataHora = receiver.split(Pattern.quote(" "));
-                if(sDataHora.length == 3){
-                    String[] sData = sDataHora[0].split(Pattern.quote("/"));
-                    String[] sHora = sDataHora[1].split(Pattern.quote(":"));
-                    int hora = Integer.parseInt(sHora[0]);
-                    if(sDataHora[2].equals("PM")){
-                        hora += 12;
-                    }
-                    if(sData.length == 3 || sHora.length == 3){
-                        calendar = new Date(Integer.parseInt(sData[2]), Integer.parseInt(sData[0]), Integer.parseInt(sData[1]), hora, Integer.parseInt(sHora[1]), Integer.parseInt(sHora[2]));
-                    }else {
-                        calendar = new Date();
-                    }
-                } else{
-                    calendar = new Date();
-                }
+                SimpleTimeZone.setDefault(TimeZone.getTimeZone(_Utc));
+                SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+                calendar = format.parse(receiver);
             } else
             {
                 calendar = new Date();

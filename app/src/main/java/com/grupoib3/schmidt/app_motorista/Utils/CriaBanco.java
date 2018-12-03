@@ -29,6 +29,7 @@ public class CriaBanco extends SQLiteOpenHelper{
     public static final String USUARIO = "USER";
     public static final String FCMTOKEN = "FCMTOKEN";
 
+
     //Campos da tabela Filiais
     public static final String COD_FILIAL = "COD_FILIAL";
     public static final String NOME_FILIAL = "NOME_FILIAL";
@@ -37,6 +38,7 @@ public class CriaBanco extends SQLiteOpenHelper{
     public static final String STATUS_FILIAL = "STATUS_FILIAL";
     public static final String ATIVO_FILIAL = "ATIVO_FILIAL";
     public static final String ID_FILIAL = "_id";
+    public static final String UTC_FILIAL = "UTC_FILIAL";
     //Versao do banco
     public static final int VERSAO = 1;
 
@@ -66,6 +68,7 @@ public class CriaBanco extends SQLiteOpenHelper{
                 NOME_FILIAL + " TEXT NOT NULL," +
                 LOCAL_FILIAL + " TEXT NOT NULL," +
                 URL_FILIAL + " TEXT NOT NULL, " +
+                UTC_FILIAL + " TEXT NOT NULL, " +
                 STATUS_FILIAL + " INT, " +
                 ATIVO_FILIAL + " INT" +
                 ")";
@@ -83,7 +86,18 @@ public class CriaBanco extends SQLiteOpenHelper{
             filiais.put(CriaBanco.NOME_FILIAL, "Mpark Estacionamento");
             filiais.put(CriaBanco.LOCAL_FILIAL, "Candeias do Jamari/RO");
             filiais.put(CriaBanco.URL_FILIAL, "https://mpark-m4-ws.postomirian.com.br/AppMotoristas/Api/");
-            filiais.put(CriaBanco.STATUS_FILIAL, 1);
+            filiais.put(CriaBanco.UTC_FILIAL, "America/Porto_Velho");
+            filiais.put(CriaBanco.STATUS_FILIAL, 0);
+            filiais.put(CriaBanco.ATIVO_FILIAL, 1);
+            db.insert(CriaBanco.TABELA[2], null, filiais);
+
+            filiais = new ContentValues();
+            filiais.put(CriaBanco.COD_FILIAL, "500503");
+            filiais.put(CriaBanco.NOME_FILIAL, "Mpark Estacionamento");
+            filiais.put(CriaBanco.LOCAL_FILIAL, "Itaituba/PA");
+            filiais.put(CriaBanco.URL_FILIAL, "https://mpark-m5-ws.postomirian.com.br/AppMotoristas/Api/");
+            filiais.put(CriaBanco.UTC_FILIAL, "America/Belem");
+            filiais.put(CriaBanco.STATUS_FILIAL, 0);
             filiais.put(CriaBanco.ATIVO_FILIAL, 1);
             db.insert(CriaBanco.TABELA[2], null, filiais);
 

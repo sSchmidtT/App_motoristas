@@ -60,6 +60,7 @@ public class Config {
     public static final String TAG_USER = "_Usuario";
     public static final String TAG_USERMSG = "_Message";
     public static final String TAG_FILIAIS = "filiais";
+    public static final String TAG_AUTERACAO= "alteracao";
 
     //base id use to pass the value of user id into intent
     public static final String BASE_ID = "base_id";

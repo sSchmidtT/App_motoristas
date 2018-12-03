@@ -238,20 +238,23 @@ public class MySettingsActivity extends PreferenceActivity {
             JSONObject jsonObject;
             try{
                 jsonObject = new JSONObject(JSON_STRING);
-                JSONArray filiais = jsonObject.optJSONArray(Config.TAG_FILIAIS);
 
-                for(int i = 0; i < filiais.length(); i++){
-                    JSONObject j  = filiais.optJSONObject(i);
-                    ContentValues filial = new ContentValues();
-                    filial.put(CriaBanco.ATIVO_FILIAL, j.optBoolean("ativo_url"));
-                    filial.put(CriaBanco.COD_FILIAL, j.optString("cod_filial"));
-                    filial.put(CriaBanco.NOME_FILIAL, j.optString("nome_filial"));
-                    filial.put(CriaBanco.LOCAL_FILIAL, j.optString("local_filial"));
-                    filial.put(CriaBanco.URL_FILIAL, j.optString("url_filial"));
+                if(jsonObject.getBoolean(Config.TAG_AUTERACAO)){
+                    JSONArray filiais = jsonObject.optJSONArray(Config.TAG_FILIAIS);
 
-                    bd.InsereFilial(filial);
+                    for(int i = 0; i < filiais.length(); i++){
+                        JSONObject j  = filiais.optJSONObject(i);
+                        ContentValues filial = new ContentValues();
+                        filial.put(CriaBanco.ATIVO_FILIAL, j.optBoolean("ativo_url"));
+                        filial.put(CriaBanco.COD_FILIAL, j.optString("cod_filial"));
+                        filial.put(CriaBanco.NOME_FILIAL, j.optString("nome_filial"));
+                        filial.put(CriaBanco.LOCAL_FILIAL, j.optString("local_filial"));
+                        filial.put(CriaBanco.URL_FILIAL, j.optString("url_filial"));
+                        filial.put(CriaBanco.UTC_FILIAL, j.getString("utc_filial"));
+
+                        bd.InsereFilial(filial);
+                    }
                 }
-
                 String data = new Date().toString();
                 ultAtt.setText(data);
                 ultAtt.setSummary(data);

@@ -228,11 +228,10 @@ public class MarcacoesFragment extends Fragment {
                         return false;
                     }
                 });
-                if(!swiping)
-                    progressDialog.dismiss();
-
-                swiping = false;
             }
+            if(!swiping)
+                progressDialog.dismiss();
+            swiping = false;
         }catch (Exception e){
             e.printStackTrace();
         }

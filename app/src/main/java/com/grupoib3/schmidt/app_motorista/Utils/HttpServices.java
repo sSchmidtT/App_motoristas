@@ -21,7 +21,7 @@ import javax.net.ssl.X509TrustManager;
 
 public class HttpServices {
 
-    private static String BaseUrl = "https://mpark-m4-ws.postomirian.com.br/AppMotoristas/Api/";
+    //private static String BaseUrl = "https://mpark-m4-ws.postomirian.com.br/AppMotoristas/Api/";
     //private static String BaseUrl = "https://192.168.1.19/AppMotoristas/Api/";
 
     //Responsavel por carregar o Objeto JSON
@@ -59,7 +59,6 @@ public class HttpServices {
 
             // Instala o verificador de host totalmente confiável
             HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-
             URL apiEnd = new URL(url);
             int codigoResposta;
             HttpURLConnection conexao;
@@ -114,12 +113,16 @@ public class HttpServices {
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
+            return e.getMessage();
         }catch (IOException e){
             e.printStackTrace();
+            return e.getMessage();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
+            return e.getMessage();
         } catch (KeyManagementException e) {
             e.printStackTrace();
+            return e.getMessage();
         }
 
         return retorno;
