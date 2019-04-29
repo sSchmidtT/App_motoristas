@@ -85,7 +85,7 @@ public class CriaBanco extends SQLiteOpenHelper{
             filiais.put(CriaBanco.COD_FILIAL, "500501");
             filiais.put(CriaBanco.NOME_FILIAL, "Mpark Estacionamento");
             filiais.put(CriaBanco.LOCAL_FILIAL, "Candeias do Jamari/RO");
-            filiais.put(CriaBanco.URL_FILIAL, "https://mpark-m4-ws.postomirian.com.br/AppMotoristas/Api/");
+            filiais.put(CriaBanco.URL_FILIAL, "https://mparkm4.postomirian.com.br/AppMotoristas/Api/");
             filiais.put(CriaBanco.UTC_FILIAL, "America/Porto_Velho");
             filiais.put(CriaBanco.STATUS_FILIAL, 0);
             filiais.put(CriaBanco.ATIVO_FILIAL, 1);
@@ -95,7 +95,7 @@ public class CriaBanco extends SQLiteOpenHelper{
             filiais.put(CriaBanco.COD_FILIAL, "500503");
             filiais.put(CriaBanco.NOME_FILIAL, "Mpark Estacionamento");
             filiais.put(CriaBanco.LOCAL_FILIAL, "Itaituba/PA");
-            filiais.put(CriaBanco.URL_FILIAL, "https://mpark-m5-ws.postomirian.com.br/AppMotoristas/Api/");
+            filiais.put(CriaBanco.URL_FILIAL, "https://mparkm5.postomirian.com.br/AppMotoristas/Api/");
             filiais.put(CriaBanco.UTC_FILIAL, "America/Belem");
             filiais.put(CriaBanco.STATUS_FILIAL, 0);
             filiais.put(CriaBanco.ATIVO_FILIAL, 1);

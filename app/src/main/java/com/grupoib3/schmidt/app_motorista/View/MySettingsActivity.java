@@ -3,7 +3,6 @@ package com.grupoib3.schmidt.app_motorista.View;
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -20,16 +19,12 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
-import android.support.annotation.RequiresApi;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.util.Log;
-import android.widget.Button;
-import android.widget.Toast;
 
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.grupoib3.schmidt.app_motorista.Config.Config;
 import com.grupoib3.schmidt.app_motorista.Models.Usuario;
 import com.grupoib3.schmidt.app_motorista.R;
@@ -40,7 +35,6 @@ import com.grupoib3.schmidt.app_motorista.Utils.TransformaDados;
 import com.grupoib3.schmidt.app_motorista.Utils.UsuarioServices;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
