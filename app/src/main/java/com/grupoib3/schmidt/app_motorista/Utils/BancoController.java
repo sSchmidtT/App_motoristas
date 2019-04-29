@@ -104,7 +104,7 @@ public class BancoController {
 
         try{
             Cursor cursor;
-            String[] campos = {CriaBanco.ID_FILIAL, CriaBanco.COD_FILIAL, CriaBanco.NOME_FILIAL, CriaBanco.LOCAL_FILIAL, CriaBanco.URL_FILIAL, CriaBanco.STATUS_FILIAL, CriaBanco.ATIVO_FILIAL};
+            String[] campos = {CriaBanco.ID_FILIAL, CriaBanco.COD_FILIAL, CriaBanco.NOME_FILIAL, CriaBanco.LOCAL_FILIAL, CriaBanco.URL_FILIAL, CriaBanco.STATUS_FILIAL, CriaBanco.ATIVO_FILIAL, CriaBanco.UTC_FILIAL};
             String where = CriaBanco.ATIVO_FILIAL + " =  1";
 
             db = banco.getReadableDatabase();
@@ -124,7 +124,7 @@ public class BancoController {
 
         try{
             Cursor cursor;
-            String[] campos = {CriaBanco.ID_FILIAL, CriaBanco.COD_FILIAL, CriaBanco.NOME_FILIAL, CriaBanco.LOCAL_FILIAL, CriaBanco.URL_FILIAL, CriaBanco.STATUS_FILIAL, CriaBanco.ATIVO_FILIAL};
+            String[] campos = {CriaBanco.ID_FILIAL, CriaBanco.COD_FILIAL, CriaBanco.NOME_FILIAL, CriaBanco.LOCAL_FILIAL, CriaBanco.URL_FILIAL, CriaBanco.STATUS_FILIAL, CriaBanco.ATIVO_FILIAL, CriaBanco.UTC_FILIAL};
             String where = CriaBanco.STATUS_FILIAL + " =  1";
 
             db = banco.getReadableDatabase();
@@ -173,6 +173,7 @@ public class BancoController {
             filiais.put(CriaBanco.STATUS_FILIAL, 1);
             filiais.put(CriaBanco.ATIVO_FILIAL, cursor.getInt(cursor.getColumnIndexOrThrow(CriaBanco.ATIVO_FILIAL)));
             filiais.put(CriaBanco.ID_FILIAL, cursor.getInt(cursor.getColumnIndexOrThrow(CriaBanco.ID_FILIAL)));
+            filiais.put(CriaBanco.UTC_FILIAL, cursor.getInt(cursor.getColumnIndexOrThrow(CriaBanco.UTC_FILIAL)));
 
             String where = CriaBanco.ID_FILIAL + " = " + cursor.getInt(cursor.getColumnIndexOrThrow(CriaBanco.ID_FILIAL));
             db.update(CriaBanco.TABELA[2],filiais, where, null);
@@ -218,13 +219,15 @@ public class BancoController {
             }else{
                 filial.put(CriaBanco.ATIVO_FILIAL, 0);
             }
-            filial.put(CriaBanco.STATUS_FILIAL, cursor.getInt(cursor.getColumnIndexOrThrow(CriaBanco.STATUS_FILIAL)));
+
 
             if(!cursor.moveToFirst()){
 
+                filial.put(CriaBanco.STATUS_FILIAL, 0);
                 ret = db.insert(CriaBanco.TABELA[2], null, filial);
 
             }else{
+                filial.put(CriaBanco.STATUS_FILIAL, cursor.getInt(cursor.getColumnIndexOrThrow(CriaBanco.STATUS_FILIAL)));
                 int cod = cursor.getInt(cursor.getColumnIndexOrThrow(CriaBanco.ID_FILIAL));
                 String where = CriaBanco.ID_FILIAL + " = " + cod;
                 filial.put(CriaBanco.ID_FILIAL, cursor.getInt(cursor.getColumnIndexOrThrow(CriaBanco.ID_FILIAL)));

@@ -5,14 +5,11 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SimpleCursorAdapter;
@@ -20,7 +17,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.grupoib3.schmidt.app_motorista.Config.Config;
 import com.grupoib3.schmidt.app_motorista.Models.Usuario;
@@ -35,7 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
-import java.util.List;
+import java.util.Random;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -49,6 +45,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     String JSON_STRING;
     BancoController bc;
     Cursor filial;
+    String utc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,7 +172,26 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     user.setCgc(txtCpf.getText().toString());
                     user.setDtNasc(txtDtNasc.getText().toString());
                     user.setFCMToken(FirebaseInstanceId.getInstance().getToken());
-                    String key = Base64.encodeToString(converted.toString().getBytes(), Base64.DEFAULT);
+                    //String key = Base64.encodeToString(converted.toString().getBytes(), Base64.DEFAULT);
+                    int[] iKey = new int[converted.length()];
+                    Random rand = new Random();
+                    for(int i = 0; i < converted.length(); i++){
+                        iKey[i] = rand.nextInt((5 - 1) + 1) + 1;
+                    }
+                    String token = converted.length() + "-";
+                    for(int i = 0; i < iKey.length; i++){
+                        token += iKey[i];
+                    }
+
+                    for(int i = 0; i < converted.length(); i++){
+                        String p = "";
+                        for(int j = 0; j < iKey[i]; j++){
+                            p += rand.nextInt((9 - 1) + 1) + 1;
+                        }
+                        token += p + converted.charAt(i);
+                    }
+
+                    String key = Base64.encodeToString(token.getBytes(), Base64.DEFAULT);
                     JSONObject json = new JSONObject();
                     try {
                         json.put("key", key);
@@ -184,6 +200,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         e.printStackTrace();
                     }
                     String url = filial.getString(filial.getColumnIndexOrThrow(CriaBanco.URL_FILIAL)) + Config.URL_GetUser;
+                    utc = filial.getString(filial.getColumnIndexOrThrow(CriaBanco.UTC_FILIAL));
 
                     String s = rh.getJSONFromAPI(url, json.toString(), "POST", "");
                     return s;
@@ -220,8 +237,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if(autenticado.getBoolean(Config.TAG_USERAUTH)){
                     user.setAccessToken(autenticado.getString(Config.TAG_USERTK));
                     user.setAuthenticated(1);
-                    user.setCreated(TransformaDados.ReturnData(autenticado.getString(Config.TAG_USERCRT)));
-                    user.setExpiration(TransformaDados.ReturnData(autenticado.getString(Config.TAG_USEREXP)));
+                    user.setCreated(TransformaDados.ReturnData(autenticado.getString(Config.TAG_USERCRT), utc));
+                    user.setExpiration(TransformaDados.ReturnData(autenticado.getString(Config.TAG_USEREXP), utc));
                     user.setUser(autenticado.getString(Config.TAG_USER));
                     user.setMessage(autenticado.getString(Config.TAG_USERMSG));
 

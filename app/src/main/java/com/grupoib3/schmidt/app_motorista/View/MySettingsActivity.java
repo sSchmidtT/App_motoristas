@@ -3,7 +3,6 @@ package com.grupoib3.schmidt.app_motorista.View;
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -20,16 +19,12 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
-import android.support.annotation.RequiresApi;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.util.Log;
-import android.widget.Button;
-import android.widget.Toast;
 
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.grupoib3.schmidt.app_motorista.Config.Config;
 import com.grupoib3.schmidt.app_motorista.Models.Usuario;
 import com.grupoib3.schmidt.app_motorista.R;
@@ -40,7 +35,6 @@ import com.grupoib3.schmidt.app_motorista.Utils.TransformaDados;
 import com.grupoib3.schmidt.app_motorista.Utils.UsuarioServices;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
@@ -238,20 +232,23 @@ public class MySettingsActivity extends PreferenceActivity {
             JSONObject jsonObject;
             try{
                 jsonObject = new JSONObject(JSON_STRING);
-                JSONArray filiais = jsonObject.optJSONArray(Config.TAG_FILIAIS);
 
-                for(int i = 0; i < filiais.length(); i++){
-                    JSONObject j  = filiais.optJSONObject(i);
-                    ContentValues filial = new ContentValues();
-                    filial.put(CriaBanco.ATIVO_FILIAL, j.optBoolean("ativo_url"));
-                    filial.put(CriaBanco.COD_FILIAL, j.optString("cod_filial"));
-                    filial.put(CriaBanco.NOME_FILIAL, j.optString("nome_filial"));
-                    filial.put(CriaBanco.LOCAL_FILIAL, j.optString("local_filial"));
-                    filial.put(CriaBanco.URL_FILIAL, j.optString("url_filial"));
+                if(jsonObject.getBoolean(Config.TAG_AUTERACAO)){
+                    JSONArray filiais = jsonObject.optJSONArray(Config.TAG_FILIAIS);
 
-                    bd.InsereFilial(filial);
+                    for(int i = 0; i < filiais.length(); i++){
+                        JSONObject j  = filiais.optJSONObject(i);
+                        ContentValues filial = new ContentValues();
+                        filial.put(CriaBanco.ATIVO_FILIAL, j.optBoolean("ativo_url"));
+                        filial.put(CriaBanco.COD_FILIAL, j.optString("cod_filial"));
+                        filial.put(CriaBanco.NOME_FILIAL, j.optString("nome_filial"));
+                        filial.put(CriaBanco.LOCAL_FILIAL, j.optString("local_filial"));
+                        filial.put(CriaBanco.URL_FILIAL, j.optString("url_filial"));
+                        filial.put(CriaBanco.UTC_FILIAL, j.getString("utc_filial"));
+
+                        bd.InsereFilial(filial);
+                    }
                 }
-
                 String data = new Date().toString();
                 ultAtt.setText(data);
                 ultAtt.setSummary(data);

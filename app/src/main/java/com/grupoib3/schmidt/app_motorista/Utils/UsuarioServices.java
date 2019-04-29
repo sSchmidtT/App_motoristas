@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.util.Base64;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.grupoib3.schmidt.app_motorista.Config.Config;
 import com.grupoib3.schmidt.app_motorista.Models.Usuario;
 import com.grupoib3.schmidt.app_motorista.View.LoginActivity;
@@ -20,12 +21,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Random;
 
 public class UsuarioServices {
 
     private static Usuario user;
     private static String JSON_STRING;
     private static BancoController dbController;
+    private static String utc;
 
     public static Usuario LoginMotorista(Context context) throws ParseException {
         try{
@@ -55,7 +58,7 @@ public class UsuarioServices {
                 //dbController.insereUsuario(user);
                 Date atualdata = new Date();
 
-                if(atualdata.after(user.getExpiration())){
+                if(atualdata.compareTo(user.getExpiration()) == 1){
                     getJson();
                 }
                 return user;
@@ -134,15 +137,38 @@ public class UsuarioServices {
                 String dia = user.getDtNasc().toString().substring(0,2);
                 String converted = user.getCgc().toString().replace(".","").replace("-", "") + ":" + ano + mes + dia;
 
-                String key = Base64.encodeToString(converted.toString().getBytes(), Base64.DEFAULT);
+                if(!user.getFCMToken().equals(FirebaseInstanceId.getInstance().getToken()))
+                    user.setFCMToken(FirebaseInstanceId.getInstance().getToken());
+
+                int[] iKey = new int[converted.length()];
+                Random rand = new Random();
+                for(int i = 0; i < converted.length(); i++){
+                    iKey[i] = rand.nextInt((5 - 1) + 1) + 1;
+                }
+                String token = converted.length() + "-";
+                for(int i = 0; i < iKey.length; i++){
+                    token += iKey[i];
+                }
+
+                for(int i = 0; i < converted.length(); i++){
+                    String p = "";
+                    for(int j = 0; j < iKey[i]; j++){
+                        p += rand.nextInt((9 - 1) + 1) + 1;
+                    }
+                    token += p + converted.charAt(i);
+                }
+
+                String key = Base64.encodeToString(token.getBytes(), Base64.DEFAULT);
                 JSONObject json = new JSONObject();
                 try {
                     json.put("key", key);
+                    json.put("FCMToken", user.getFCMToken());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 Cursor cursor = dbController.carregaURLFilialByStatus();
                 String url = cursor.getString(cursor.getColumnIndexOrThrow(CriaBanco.URL_FILIAL)) + Config.URL_GetUser;
+                utc = cursor.getString(cursor.getColumnIndexOrThrow(CriaBanco.UTC_FILIAL));
 
                 String s = rh.getJSONFromAPI(url, json.toString(), "POST", "");
                 return s;
@@ -176,8 +202,8 @@ public class UsuarioServices {
                 if(autenticado.getBoolean(Config.TAG_USERAUTH)){
                     user.setAccessToken(autenticado.getString(Config.TAG_USERTK));
                     user.setAuthenticated(1);
-                    user.setCreated(TransformaDados.ReturnData(autenticado.getString(Config.TAG_USERCRT)));
-                    user.setExpiration(TransformaDados.ReturnData(autenticado.getString(Config.TAG_USEREXP)));
+                    user.setCreated(TransformaDados.ReturnData(autenticado.getString(Config.TAG_USERCRT), utc));
+                    user.setExpiration(TransformaDados.ReturnData(autenticado.getString(Config.TAG_USEREXP), utc));
                     user.setUser(autenticado.getString(Config.TAG_USER));
                     user.setMessage(autenticado.getString(Config.TAG_USERMSG));
 
