@@ -9,6 +9,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -21,9 +22,15 @@ import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.grupoib3.schmidt.app_motorista.Models.Notificacao;
+import com.grupoib3.schmidt.app_motorista.Models.Usuario;
 import com.grupoib3.schmidt.app_motorista.R;
 import com.grupoib3.schmidt.app_motorista.View.MainActivity;
 import com.grupoib3.schmidt.app_motorista.View.WebActivity;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMsgService";
@@ -174,7 +181,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                                 .setContentIntent(pendingIntent)
                                 .setColor(R.color.colorPrimary)
                                 .setPriority(Notification.PRIORITY_HIGH)
-                                .setVisibility(Notification.VISIBILITY_PUBLIC);
+                                .setVisibility(Notification.VISIBILITY_PRIVATE);
                 if(!ring.equals(""))
                     notificationBuilder.setSound(sound);
                 if(notificate_vibrate)
@@ -253,7 +260,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
 
                     }else{
-                        @SuppressLint("ResourceAsColor")
+                        @SuppressLint({"ResourceAsColor", "WrongConstant"})
                         NotificationCompat.Builder notificationBuilder =
                                 new NotificationCompat.Builder(this, channelId)
                                         .setSmallIcon(R.drawable.ic_boton_notification_mpark)
@@ -264,7 +271,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                                         .setContentIntent(pendingIntent)
                                         .setColor(R.color.colorPrimary)
                                         .setPriority(Notification.PRIORITY_HIGH)
-                                        .setVisibility(Notification.VISIBILITY_PUBLIC);
+                                        .setVisibility(Notification.VISIBILITY_PRIVATE);
                         if(!ring.equals(""))
                             notificationBuilder.setSound(sound);
                         if(notificate_vibrate)
@@ -342,7 +349,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
 
                 }else{
-                    @SuppressLint("ResourceAsColor")
+                    @SuppressLint({"ResourceAsColor", "WrongConstant"})
                     NotificationCompat.Builder notificationBuilder =
                             new NotificationCompat.Builder(this, channelId)
                                     .setSmallIcon(R.drawable.ic_boton_notification_mpark)
@@ -353,7 +360,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                                     .setContentIntent(pendingIntent)
                                     .setColor(R.color.colorPrimary)
                                     .setPriority(Notification.PRIORITY_HIGH)
-                                    .setVisibility(Notification.VISIBILITY_PUBLIC);
+                                    .setVisibility(Notification.VISIBILITY_PRIVATE);
                     if(!ring.equals(""))
                         notificationBuilder.setSound(sound);
                     if(notificate_vibrate)
@@ -370,6 +377,27 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void sendDataNotification(RemoteMessage remoteMessage) {
         String body = remoteMessage.getData().get("body");
         String title = remoteMessage.getData().get("title");
+        BancoController bd = new BancoController(getBaseContext());
+        Cursor cursor = bd.carregaURLFilialByStatus();
+        Usuario user = new Usuario();
+        try {
+            user = UsuarioServices.LoginMotorista(getBaseContext());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Date dNow = new Date( );
+        SimpleDateFormat ft =
+                new SimpleDateFormat ("dd/MM/yyyy hh:mm:ss a");
+
+        Notificacao notifi = new Notificacao();
+        notifi.setData_notificacao(ft.format(dNow));
+        notifi.setId_filial(cursor.getInt(cursor.getColumnIndexOrThrow(CriaBanco.COD_FILIAL)));
+        notifi.setId_user(user.getId());
+        notifi.setMsg_notificacao(body);
+        notifi.setTitulo_notificacao(title);
+        notifi.setStatus_notificacao(0);
+
+        bd.InsereNotification(notifi);
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -426,7 +454,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
 
             }else{
-                @SuppressLint("ResourceAsColor")
+                @SuppressLint({"ResourceAsColor", "WrongConstant"})
                 NotificationCompat.Builder notificationBuilder =
                         new NotificationCompat.Builder(this, channelId)
                                 .setSmallIcon(R.drawable.ic_boton_notification_mpark)
@@ -437,7 +465,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                                 .setContentIntent(pendingIntent)
                                 .setColor(R.color.colorPrimary)
                                 .setPriority(Notification.PRIORITY_HIGH)
-                                .setVisibility(Notification.VISIBILITY_PUBLIC);
+                                .setVisibility(Notification.VISIBILITY_PRIVATE);
                 if(!ring.equals(""))
                     notificationBuilder.setSound(sound);
                 if(notificate_vibrate)

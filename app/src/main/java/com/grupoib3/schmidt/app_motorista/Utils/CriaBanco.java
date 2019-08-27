@@ -14,7 +14,7 @@ public class CriaBanco extends SQLiteOpenHelper{
     public static final String[] TABELA;
 
     static {
-        TABELA = new String[]{"USUARIO", "CONFIGURE", "FILIAL"};
+        TABELA = new String[]{"USUARIO", "NOTIFICATION", "FILIAL"};
     }
 
     //Campos da tabela de usuario
@@ -39,8 +39,18 @@ public class CriaBanco extends SQLiteOpenHelper{
     public static final String ATIVO_FILIAL = "ATIVO_FILIAL";
     public static final String ID_FILIAL = "_id";
     public static final String UTC_FILIAL = "UTC_FILIAL";
+
+    //Campos da tabela Notification
+    public static final String ID_NOTIFI = "ID";
+    public static final String ID_USER_PK = "ID_USUARIO";
+    public static final String ID_FILIAL_PK = "ID_FILIAL";
+    public static final String DATE_NOTIFI = "DATA_NOTIFICACAO";
+    public static final String TITLE_NOTIFI = "TITULO_NOTIFICACAO";
+    public static final String MSG_NOTIFI = "MSG_NOTIFICACAO";
+    public static final String STATUS_NOTIFI = "STATUS_NOTIFICACAO";
+
     //Versao do banco
-    public static final int VERSAO = 1;
+    public static final int VERSAO = 2;
 
     public CriaBanco(Context context) {
         super(context, NOME_BANCO, null, VERSAO);
@@ -73,8 +83,19 @@ public class CriaBanco extends SQLiteOpenHelper{
                 ATIVO_FILIAL + " INT" +
                 ")";
 
+        String notifi = "CREATE TABLE " + TABELA[1] + " ( " +
+                ID_NOTIFI + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                ID_FILIAL_PK + " INTEGER NOT NULL, " +
+                ID_USER_PK + " INTEGER NOT NULL," +
+                DATE_NOTIFI + " TEXT NOT NULL," +
+                TITLE_NOTIFI + " TEXT NOT NULL, " +
+                MSG_NOTIFI + " TEXT NOT NULL, " +
+                STATUS_NOTIFI + " INT " +
+                ")";
+
         db.execSQL(Sql);
         db.execSQL(filial);
+        db.execSQL(notifi);
 
         insertFiliais(db);
     }

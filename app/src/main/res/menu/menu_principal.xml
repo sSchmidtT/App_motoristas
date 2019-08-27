@@ -3,12 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.grupoib3.schmidt.mpark_motoristas.view.PrincipalActivity">
     <item
+        android:id="@+id/action_notifi"
+        android:contentDescription="@string/notifica_es"
+        android:icon="@drawable/ic_stat_notifications_none"
+        android:menuCategory="container"
+        android:numericShortcut="0"
+        android:title="@string/notifica_es"
+        android:titleCondensed="@string/notifica_es"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/action_settings"
+        android:icon="@drawable/ic_stat_phonelink_setup"
+        android:numericShortcut="1"
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_deslogar"
+        android:icon="@drawable/ic_stat_exit_to_app"
+        android:numericShortcut="2"
         android:orderInCategory="100"
         android:title="@string/action_deslogar"
         app:showAsAction="never" />

@@ -14,7 +14,7 @@ public class TransformaDados {
             Date calendar;
             if(receiver.length() > 0){
                 SimpleTimeZone.setDefault(TimeZone.getTimeZone(_Utc));
-                SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ssZ");
                 calendar = format.parse(receiver);
             } else
             {

@@ -3,6 +3,8 @@ package com.grupoib3.schmidt.app_motorista.View;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -13,7 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.grupoib3.schmidt.app_motorista.Models.Usuario;
 import com.grupoib3.schmidt.app_motorista.R;
+import com.grupoib3.schmidt.app_motorista.Utils.BancoController;
 import com.grupoib3.schmidt.app_motorista.Utils.UsuarioServices;
 
 import java.text.ParseException;
@@ -21,11 +25,16 @@ import java.text.ParseException;
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     private  AlertDialog alertDialog;
+    BancoController db;
+    int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent intent = getIntent();
+        userId = (int) intent.getSerializableExtra("userID");
 
         //loading the default fragment
         loadFragment(new MarcacaoFragment());
@@ -33,13 +42,20 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         //getting bottom navigation view and attaching the listener
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(this);
+        db = new BancoController(this);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         try{
+            int qntNotifi = db.contaNotificacoesAtivas(userId);
             // Inflate the menu; this adds items to the action bar if it is present.
             getMenuInflater().inflate(R.menu.menu_principal, menu);
+            MenuItem item = menu.getItem(2);
+            if(qntNotifi > 0)
+                item.setIcon(R.drawable.ic_stat_notifications_active);
+            else
+                item.setIcon(R.drawable.ic_stat_notifications_none);
             return true;
         }catch (Exception ex){
             throw ex;
@@ -71,6 +87,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+            }else if(id == R.id.action_notifi){
+                startActivity(
+                        new Intent(
+                                MainActivity.this, NotificationActivity.class));
             }
 
             return super.onOptionsItemSelected(item);
@@ -122,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         });
         builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface arg0, int arg1) {
-                alertDialog.dismiss();
+                arg0.dismiss();
             }
         });
         alertDialog = builder.create();

@@ -1,0 +1,51 @@
+package com.grupoib3.schmidt.app_motorista.Utils;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.grupoib3.schmidt.app_motorista.R;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ListaSemNotificacaoesAdapter extends RecyclerView.Adapter<ListaSemNotificacaoesAdapter.ViewHolder> {
+
+    List<String> _sMarc;
+    public ListaSemNotificacaoesAdapter() {
+        _sMarc = new ArrayList<>();
+        _sMarc.add("Não há notificações.");
+    }
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.notificacoes_sem_item, parent, false);
+        final ViewHolder vh = new ViewHolder(v);
+        return vh;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        String des = _sMarc.get(position);
+        holder.txt_semitem.setText(des);
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return _sMarc.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView txt_semitem;
+        public ViewHolder(View itemView) {
+            super(itemView);
+            txt_semitem = (TextView) itemView.findViewById(R.id.txt_sem_marcacao);
+        }
+    }
+}

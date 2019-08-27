@@ -9,6 +9,8 @@ import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Parcelable;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -30,6 +32,7 @@ import com.grupoib3.schmidt.app_motorista.Utils.UsuarioServices;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Random;
 
@@ -61,12 +64,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     e.printStackTrace();
                 }
                 if(user.getAuthenticated() == 1){ //se autenticado, vai para pagina inicial
-                    startActivity(
-                            new Intent(
-                                    LoginActivity.this, MainActivity.class));
+                    Intent intent = new Intent(this.getBaseContext(), MainActivity.class);
+                    intent.putExtra("userID", user.getId());
+                    this.startActivity(intent);
+                    //startActivity(
+                           // new Intent(
+                                    //LoginActivity.this, MainActivity.class));
                     finish();
                 }else{ //se nao autenticado, entra na tela de login
-
                     bc = new BancoController(getBaseContext());
                     txtCpf = this.findViewById(R.id.txtCpf);
                     txtDtNasc = this.findViewById(R.id.txtDtNasc);
@@ -244,9 +249,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     bc.insereUsuario(user);
 
-                    startActivity(
-                            new Intent(
-                                    LoginActivity.this, MainActivity.class));
+                    //startActivity(
+                            //new Intent(
+                                    //LoginActivity.this, MainActivity.class));
+
+                    Intent intent = new Intent(this.getBaseContext(), MainActivity.class);
+                    intent.putExtra("userID", user.getId());
+                    this.startActivity(intent);
                     finish();
 
                 }else{

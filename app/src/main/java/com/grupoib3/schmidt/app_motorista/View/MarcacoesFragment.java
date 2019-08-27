@@ -124,7 +124,7 @@ public class MarcacoesFragment extends Fragment {
                     Cursor cursor = bd.carregaURLFilialByStatus();
                     String url = cursor.getString(cursor.getColumnIndexOrThrow(CriaBanco.URL_FILIAL)) + Config.URL_Display;
                     String s = rh.getJSONFromAPI(url, "", "GET", user.getAccessToken());
-                return s;
+                    return s;
                 }catch (Exception ex){
                     throw ex;
                 }

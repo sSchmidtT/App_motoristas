@@ -6,7 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.google.android.gms.common.util.CrashUtils;
+import com.grupoib3.schmidt.app_motorista.Models.Notificacao;
 import com.grupoib3.schmidt.app_motorista.Models.Usuario;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BancoController {
 
@@ -246,5 +250,96 @@ public class BancoController {
         }
     }
 
+    public boolean InsereNotification(Notificacao notification){
+        long resultado = 0;
+        //db.beginTransaction();
+        try {
+            ContentValues val;
 
+            db = banco.getWritableDatabase();
+
+            val = new ContentValues();
+            val.put(CriaBanco.ID_FILIAL_PK, notification.getId_filial());
+            val.put(CriaBanco.ID_USER_PK, notification.getId_user());
+            val.put(CriaBanco.DATE_NOTIFI, notification.getData_notificacao());
+            val.put(CriaBanco.TITLE_NOTIFI, notification.getTitulo_notificacao());
+            val.put(CriaBanco.MSG_NOTIFI, notification.getMsg_notificacao());
+            val.put(CriaBanco.STATUS_NOTIFI, notification.getStatus_notificacao());
+
+            if(notification.getId() != 0){
+                val.put(CriaBanco.ID_NOTIFI, notification.getId());
+                String where = CriaBanco.ID + " = " + notification.getId();
+                resultado = db.update(CriaBanco.TABELA[1], val, where, null);
+            }else{
+
+                resultado = db.insert(CriaBanco.TABELA[1], null, val);
+            }
+
+            db.close();
+
+
+            //db.setTransactionSuccessful();
+        }catch (Exception ex){
+            throw ex;
+        }finally {
+            //db.endTransaction();
+            if(resultado <= 0){
+                return false;
+            }else{
+                return true;
+            }
+        }
+    }
+
+    public List<Notificacao> carregaNotificacoes(int id_user){
+
+        try{
+            Cursor cursor;
+            String[] campos = {CriaBanco.ID_NOTIFI, CriaBanco.ID_USER_PK, CriaBanco.ID_FILIAL_PK, CriaBanco.DATE_NOTIFI, CriaBanco.TITLE_NOTIFI, CriaBanco.MSG_NOTIFI, CriaBanco.STATUS_NOTIFI};
+            String where = CriaBanco.ID_USER_PK + " = " + id_user;
+
+            db = banco.getReadableDatabase();
+            cursor = db.query(CriaBanco.TABELA[1], campos, where, null, null, null, null);
+            List<Notificacao> notificacoes = new ArrayList<>();
+            if(cursor != null){
+                cursor.moveToFirst();
+                for (int i = 0; i < cursor.getCount(); i++){
+                    Notificacao notifi = new Notificacao();
+                    cursor.moveToPosition(i);
+                    notifi.setId(cursor.getInt(cursor.getColumnIndexOrThrow(CriaBanco.ID_NOTIFI)));
+                    notifi.setId_user(cursor.getInt(cursor.getColumnIndexOrThrow(CriaBanco.ID_USER_PK)));
+                    notifi.setId_filial(cursor.getInt(cursor.getColumnIndexOrThrow(CriaBanco.ID_FILIAL_PK)));
+                    notifi.setStatus_notificacao(cursor.getInt(cursor.getColumnIndexOrThrow(CriaBanco.STATUS_NOTIFI)));
+                    notifi.setTitulo_notificacao(cursor.getString(cursor.getColumnIndexOrThrow(CriaBanco.TITLE_NOTIFI)));
+                    notifi.setMsg_notificacao(cursor.getString(cursor.getColumnIndexOrThrow(CriaBanco.MSG_NOTIFI)));
+                    notifi.setData_notificacao(cursor.getString(cursor.getColumnIndexOrThrow(CriaBanco.DATE_NOTIFI)));
+                    notificacoes.add(notifi);
+                }
+            }
+            db.close();
+            return notificacoes;
+        }catch (Exception ex){
+            throw ex;
+        }
+    }
+
+    public int contaNotificacoesAtivas(int id_user){
+
+        try{
+            Cursor cursor;
+            String[] campos = {CriaBanco.ID_NOTIFI, CriaBanco.DATE_NOTIFI, CriaBanco.TITLE_NOTIFI, CriaBanco.MSG_NOTIFI};
+            String where = CriaBanco.ID_USER_PK + " = " + id_user + " AND " + CriaBanco.STATUS_NOTIFI + " = 0";
+
+            db = banco.getReadableDatabase();
+            cursor = db.query(CriaBanco.TABELA[1], campos, where, null, null, null, null);
+
+            if(cursor != null){
+                cursor.moveToFirst();
+            }
+            db.close();
+            return cursor.getCount();
+        }catch (Exception ex){
+            throw ex;
+        }
+    }
 }
