@@ -39,6 +39,7 @@ public class BancoController {
             val.put(CriaBanco.MESSAGE, usuario.getMessage());
             val.put(CriaBanco.USUARIO, usuario.getUser());
             val.put(CriaBanco.FCMTOKEN, usuario.getFCMToken());
+            val.put(CriaBanco.ID_FILIAL_FK, usuario.getId_Filial());
 
             if(usuario.getId() != 0){
                 String where = CriaBanco.ID + " = " + usuario.getId();
@@ -68,7 +69,7 @@ public class BancoController {
 
         try{
             Cursor cursor;
-            String[] campos = {CriaBanco.ID, CriaBanco.CGC, CriaBanco.DTNASC, CriaBanco.AUTH, CriaBanco.CREATED, CriaBanco.EXPIRATION, CriaBanco.ACCESSTOKEN, CriaBanco.MESSAGE, CriaBanco.USUARIO, CriaBanco.FCMTOKEN};
+            String[] campos = {CriaBanco.ID, CriaBanco.CGC, CriaBanco.DTNASC, CriaBanco.AUTH, CriaBanco.CREATED, CriaBanco.EXPIRATION, CriaBanco.ACCESSTOKEN, CriaBanco.MESSAGE, CriaBanco.USUARIO, CriaBanco.FCMTOKEN, CriaBanco.ID_FILIAL_FK};
             String where = CriaBanco.AUTH + " = " + auth;
 
             db = banco.getReadableDatabase();
@@ -150,6 +151,26 @@ public class BancoController {
             Cursor cursor;
             String[] campos = {CriaBanco.ID_FILIAL, CriaBanco.COD_FILIAL, CriaBanco.NOME_FILIAL, CriaBanco.LOCAL_FILIAL, CriaBanco.URL_FILIAL, CriaBanco.STATUS_FILIAL, CriaBanco.ATIVO_FILIAL};
             String where = CriaBanco.COD_FILIAL + " = " + cod_filial;
+
+            db = banco.getReadableDatabase();
+            cursor = db.query(CriaBanco.TABELA[2], campos, where, null, null, null, null);
+
+            if(cursor != null){
+                cursor.moveToFirst();
+            }
+            db.close();
+            return cursor;
+        }catch (Exception ex){
+            throw ex;
+        }
+    }
+
+    public Cursor carregaFilialById(int id_filial){
+
+        try{
+            Cursor cursor;
+            String[] campos = {CriaBanco.ID_FILIAL, CriaBanco.COD_FILIAL, CriaBanco.NOME_FILIAL, CriaBanco.LOCAL_FILIAL, CriaBanco.URL_FILIAL, CriaBanco.STATUS_FILIAL, CriaBanco.ATIVO_FILIAL, CriaBanco.UTC_FILIAL};
+            String where = CriaBanco.ID_FILIAL + " = " + id_filial;
 
             db = banco.getReadableDatabase();
             cursor = db.query(CriaBanco.TABELA[2], campos, where, null, null, null, null);
@@ -259,12 +280,13 @@ public class BancoController {
             db = banco.getWritableDatabase();
 
             val = new ContentValues();
-            val.put(CriaBanco.ID_FILIAL_PK, notification.getId_filial());
-            val.put(CriaBanco.ID_USER_PK, notification.getId_user());
+            val.put(CriaBanco.ID_FILIAL_FK, notification.getId_filial());
+            val.put(CriaBanco.ID_USER_FK, notification.getId_user());
             val.put(CriaBanco.DATE_NOTIFI, notification.getData_notificacao());
             val.put(CriaBanco.TITLE_NOTIFI, notification.getTitulo_notificacao());
             val.put(CriaBanco.MSG_NOTIFI, notification.getMsg_notificacao());
             val.put(CriaBanco.STATUS_NOTIFI, notification.getStatus_notificacao());
+            val.put(CriaBanco.URL_NOTIFI, notification.getUrl());
 
             if(notification.getId() != 0){
                 val.put(CriaBanco.ID_NOTIFI, notification.getId());
@@ -291,15 +313,16 @@ public class BancoController {
         }
     }
 
-    public List<Notificacao> carregaNotificacoes(int id_user){
+    public List<Notificacao> carregaNotificacoes(int id_user, int id_filial){
 
         try{
             Cursor cursor;
-            String[] campos = {CriaBanco.ID_NOTIFI, CriaBanco.ID_USER_PK, CriaBanco.ID_FILIAL_PK, CriaBanco.DATE_NOTIFI, CriaBanco.TITLE_NOTIFI, CriaBanco.MSG_NOTIFI, CriaBanco.STATUS_NOTIFI};
-            String where = CriaBanco.ID_USER_PK + " = " + id_user;
+            String[] campos = {CriaBanco.ID_NOTIFI, CriaBanco.ID_USER_FK, CriaBanco.ID_FILIAL_FK, CriaBanco.DATE_NOTIFI, CriaBanco.TITLE_NOTIFI, CriaBanco.MSG_NOTIFI, CriaBanco.STATUS_NOTIFI, CriaBanco.URL_NOTIFI};
+            String where = CriaBanco.ID_USER_FK + " = " + id_user + " AND " + CriaBanco.ID_FILIAL_FK + " = " + id_filial;
+            String orderBy = CriaBanco.DATE_NOTIFI + " desc";
 
             db = banco.getReadableDatabase();
-            cursor = db.query(CriaBanco.TABELA[1], campos, where, null, null, null, null);
+            cursor = db.query(CriaBanco.TABELA[1], campos, where,null, null, null, orderBy);
             List<Notificacao> notificacoes = new ArrayList<>();
             if(cursor != null){
                 cursor.moveToFirst();
@@ -307,12 +330,13 @@ public class BancoController {
                     Notificacao notifi = new Notificacao();
                     cursor.moveToPosition(i);
                     notifi.setId(cursor.getInt(cursor.getColumnIndexOrThrow(CriaBanco.ID_NOTIFI)));
-                    notifi.setId_user(cursor.getInt(cursor.getColumnIndexOrThrow(CriaBanco.ID_USER_PK)));
-                    notifi.setId_filial(cursor.getInt(cursor.getColumnIndexOrThrow(CriaBanco.ID_FILIAL_PK)));
+                    notifi.setId_user(cursor.getInt(cursor.getColumnIndexOrThrow(CriaBanco.ID_USER_FK)));
+                    notifi.setId_filial(cursor.getInt(cursor.getColumnIndexOrThrow(CriaBanco.ID_FILIAL_FK)));
                     notifi.setStatus_notificacao(cursor.getInt(cursor.getColumnIndexOrThrow(CriaBanco.STATUS_NOTIFI)));
                     notifi.setTitulo_notificacao(cursor.getString(cursor.getColumnIndexOrThrow(CriaBanco.TITLE_NOTIFI)));
                     notifi.setMsg_notificacao(cursor.getString(cursor.getColumnIndexOrThrow(CriaBanco.MSG_NOTIFI)));
                     notifi.setData_notificacao(cursor.getString(cursor.getColumnIndexOrThrow(CriaBanco.DATE_NOTIFI)));
+                    notifi.setUrl(cursor.getString(cursor.getColumnIndexOrThrow(CriaBanco.URL_NOTIFI)));
                     notificacoes.add(notifi);
                 }
             }
@@ -323,12 +347,12 @@ public class BancoController {
         }
     }
 
-    public int contaNotificacoesAtivas(int id_user){
+    public int contaNotificacoesAtivas(int id_user, int id_filial){
 
         try{
             Cursor cursor;
             String[] campos = {CriaBanco.ID_NOTIFI, CriaBanco.DATE_NOTIFI, CriaBanco.TITLE_NOTIFI, CriaBanco.MSG_NOTIFI};
-            String where = CriaBanco.ID_USER_PK + " = " + id_user + " AND " + CriaBanco.STATUS_NOTIFI + " = 0";
+            String where = CriaBanco.ID_USER_FK + " = " + id_user + " AND " + CriaBanco.ID_FILIAL_FK + " = " + id_filial + " AND " + CriaBanco.STATUS_NOTIFI + " = 0";
 
             db = banco.getReadableDatabase();
             cursor = db.query(CriaBanco.TABELA[1], campos, where, null, null, null, null);

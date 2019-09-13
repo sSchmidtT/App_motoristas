@@ -5,12 +5,12 @@
     <item
         android:id="@+id/action_notifi"
         android:contentDescription="@string/notifica_es"
-        android:icon="@drawable/ic_stat_notifications_none"
-        android:menuCategory="container"
+        android:menuCategory="system"
         android:numericShortcut="0"
         android:title="@string/notifica_es"
-        android:titleCondensed="@string/notifica_es"
-        app:showAsAction="ifRoom" />
+        android:visibility="visible"
+        app:actionLayout="@layout/notification_icon_layout"
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/action_settings"
         android:icon="@drawable/ic_stat_phonelink_setup"

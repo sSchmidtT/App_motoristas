@@ -13,19 +13,9 @@ public class Usuario {
     private String Message;
     private String User;
     private String FCMToken;
+    private int Id_Filial;
 
-    public Usuario(int id, String cgc, String dtNasc, int authenticated, Date created, Date expiration, String accessToken, String message, String user, String fcmToken) {
-        Id = id;
-        Cgc = cgc;
-        DtNasc = dtNasc;
-        Authenticated = authenticated;
-        Created = created;
-        Expiration = expiration;
-        AccessToken = accessToken;
-        Message = message;
-        User = user;
-        FCMToken = fcmToken;
-    }
+
     public Usuario(){
 
     }
@@ -108,5 +98,13 @@ public class Usuario {
 
     public void setFCMToken(String FCMToken) {
         this.FCMToken = FCMToken;
+    }
+
+    public int getId_Filial() {
+        return Id_Filial;
+    }
+
+    public void setId_Filial(int id_Filial) {
+        Id_Filial = id_Filial;
     }
 }

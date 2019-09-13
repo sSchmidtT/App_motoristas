@@ -8,8 +8,9 @@ public class Notificacao {
     private String titulo_notificacao;
     private String msg_notificacao;
     private int status_notificacao;
+    private String url;
 
-    public Notificacao(int id, int id_user, int id_filial, String data_notificacao, String titulo_notificacao, String msg_notificacao, int status_notificacao) {
+    public Notificacao(int id, int id_user, int id_filial, String data_notificacao, String titulo_notificacao, String msg_notificacao, int status_notificacao, String url) {
         this.id = id;
         this.id_user = id_user;
         this.id_filial = id_filial;
@@ -17,6 +18,7 @@ public class Notificacao {
         this.titulo_notificacao = titulo_notificacao;
         this.msg_notificacao = msg_notificacao;
         this.status_notificacao = status_notificacao;
+        this.url = url;
     }
 
     public  Notificacao(){}
@@ -75,5 +77,13 @@ public class Notificacao {
 
     public void setStatus_notificacao(int status_notificacao) {
         this.status_notificacao = status_notificacao;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

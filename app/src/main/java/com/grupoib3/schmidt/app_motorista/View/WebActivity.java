@@ -1,5 +1,6 @@
 package com.grupoib3.schmidt.app_motorista.View;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,17 +10,20 @@ import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import com.grupoib3.schmidt.app_motorista.R;
 
 public class WebActivity extends AppCompatActivity {
 
-    private AlertDialog alertDialog;
+    private Toast toast;
+    private long lastBackPressTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
+        getSupportActionBar().hide();
 
         WebView wv = (WebView) findViewById(R.id.webview);
 
@@ -33,30 +37,21 @@ public class WebActivity extends AppCompatActivity {
 
         wv.loadUrl(url);
         wv.setWebViewClient(new MyWebViewClient());
-
     }
 
+    @SuppressLint("WrongConstant")
     @Override
     public void onBackPressed(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Mpark Motorista");
-        builder.setMessage("Atenção, não será possível retornar para esta página novamente sem prévio convite. Deseja realmente abandonar a página atual?");
-
-        builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface arg0, int arg1) {
-                startActivity(
-                        new Intent(
-                                WebActivity.this, MainActivity.class));
-                finish();
+        if (this.lastBackPressTime < System.currentTimeMillis() - 4000) {
+            toast = Toast.makeText(this, "Pressione o botão voltar novamente para fechar a página web.", 4000);
+            toast.show();
+            this.lastBackPressTime = System.currentTimeMillis();
+        } else {
+            if (toast != null) {
+                toast.cancel();
             }
-        });
-        builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface arg0, int arg1) {
-                alertDialog.dismiss();
-            }
-        });
-        alertDialog = builder.create();
-        alertDialog.show();
+            super.onBackPressed();
+        }
     }
 
 

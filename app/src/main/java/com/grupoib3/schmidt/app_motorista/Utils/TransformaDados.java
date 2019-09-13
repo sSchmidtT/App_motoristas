@@ -46,7 +46,8 @@ public class TransformaDados {
                 String[] quebraStr = dado.split(" ");
                 String retorno = "";
                 for (int i = 0; i < quebraStr.length; i++){
-                    retorno += quebraStr[i].substring(0,1).toUpperCase() + quebraStr[i].substring(1, quebraStr[i].length()).toLowerCase() + " ";
+                    if(!quebraStr[i].equals(""))
+                        retorno += quebraStr[i].substring(0,1).toUpperCase() + quebraStr[i].substring(1, quebraStr[i].length()).toLowerCase() + " ";
                 }
                 return retorno;
             }

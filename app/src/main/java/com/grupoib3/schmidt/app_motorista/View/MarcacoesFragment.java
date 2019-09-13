@@ -113,7 +113,7 @@ public class MarcacoesFragment extends Fragment {
             protected void onPreExecute() {
                 super.onPreExecute();
                 if(!swiping)
-                    progressDialog = ProgressDialog.show(getContext(), "Carregando Marcações", "Aguarde...", false, false);
+                    progressDialog = ProgressDialog.show(getContext(), "Carregando lista de viagens", "Aguarde...", false, false);
             }
 
             @Override
@@ -121,7 +121,7 @@ public class MarcacoesFragment extends Fragment {
                 try{
 
                     HttpServices rh = new HttpServices();
-                    Cursor cursor = bd.carregaURLFilialByStatus();
+                    Cursor cursor = bd.carregaFilialById(user.getId_Filial());
                     String url = cursor.getString(cursor.getColumnIndexOrThrow(CriaBanco.URL_FILIAL)) + Config.URL_Display;
                     String s = rh.getJSONFromAPI(url, "", "GET", user.getAccessToken());
                     return s;

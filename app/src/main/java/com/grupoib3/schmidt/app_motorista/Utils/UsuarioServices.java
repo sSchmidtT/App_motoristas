@@ -53,6 +53,7 @@ public class UsuarioServices {
                 user.setAccessToken(cursor.getString(cursor.getColumnIndexOrThrow(CriaBanco.ACCESSTOKEN)));
                 user.setUser(cursor.getString(cursor.getColumnIndexOrThrow(CriaBanco.USUARIO)));
                 user.setFCMToken(cursor.getString(cursor.getColumnIndexOrThrow(CriaBanco.FCMTOKEN)));
+                user.setId_Filial(cursor.getInt(cursor.getColumnIndexOrThrow(CriaBanco.ID_FILIAL_FK)));
 
                 cursor.close();
                 //dbController.insereUsuario(user);
@@ -102,16 +103,6 @@ public class UsuarioServices {
                     ret = dbController.insereUsuario(user);
                 }while (cursor.moveToNext());
                 cursor.close();
-
-                if(ret){
-                    Cursor filial = dbController.carregaURLFilialByStatus();
-                    if(filial.moveToFirst()){
-                        do {
-                            dbController.MarcaFilialInativa(filial);
-                        }while (filial.moveToNext());
-                        filial.close();
-                    }
-                }
                 return ret;
             }
             return false;
@@ -166,7 +157,7 @@ public class UsuarioServices {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Cursor cursor = dbController.carregaURLFilialByStatus();
+                Cursor cursor = dbController.carregaFilialById(user.getId_Filial());
                 String url = cursor.getString(cursor.getColumnIndexOrThrow(CriaBanco.URL_FILIAL)) + Config.URL_GetUser;
                 utc = cursor.getString(cursor.getColumnIndexOrThrow(CriaBanco.UTC_FILIAL));
 

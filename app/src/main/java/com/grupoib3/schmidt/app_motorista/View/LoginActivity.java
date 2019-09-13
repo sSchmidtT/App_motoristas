@@ -1,5 +1,6 @@
 package com.grupoib3.schmidt.app_motorista.View;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -13,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Parcelable;
 import android.util.Base64;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
@@ -38,17 +41,18 @@ import java.util.Random;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
-    TextView txtCpf;
-    TextView txtDtNasc;
-    Button btnLogin;
-    Spinner spinnerFiliais;
-    AlertDialog alertDialog;
-    ProgressDialog progressDialog;
-    Usuario user;
-    String JSON_STRING;
-    BancoController bc;
-    Cursor filial;
-    String utc;
+    private TextView txtCpf;
+    private TextView txtDtNasc;
+    private Button btnLogin;
+    private Spinner spinnerFiliais;
+    private ProgressDialog progressDialog;
+    private Usuario user;
+    private String JSON_STRING;
+    private BancoController bc;
+    private Cursor filial;
+    private String utc;
+    private Toast toast;
+    private long lastBackPressTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +60,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_login);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); // Para o layout preencher toda tela do cel (remover a barra de tit.)
+
+            getSupportActionBar().hide();
             //FirebaseApp.initializeApp(this);
             if(verificaConexao()){
                 try {
@@ -64,8 +71,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     e.printStackTrace();
                 }
                 if(user.getAuthenticated() == 1){ //se autenticado, vai para pagina inicial
-                    Intent intent = new Intent(this.getBaseContext(), MainActivity.class);
-                    intent.putExtra("userID", user.getId());
+                    Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("userId", user.getId());
+                    bundle.putSerializable("userIdFilial", user.getId_Filial());
+                    intent.putExtras(bundle);
                     this.startActivity(intent);
                     //startActivity(
                            // new Intent(
@@ -105,8 +115,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     toast.show();
                 }else{
                     filial = (Cursor) spinnerFiliais.getSelectedItem();
-                    if(filial.getInt(filial.getColumnIndexOrThrow(CriaBanco.STATUS_FILIAL)) == 0 )
-                         bc.MarcaFilialAtiva(filial);
                     getJson();
                 }
 
@@ -114,27 +122,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    @SuppressLint("WrongConstant")
     @Override
     public void onBackPressed(){
-        try{
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Mpark Motorista");
-            builder.setMessage("Deseja fechar o programa?");
-
-            builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface arg0, int arg1) {
-                    finish();
-                }
-            });
-            builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface arg0, int arg1) {
-                    alertDialog.dismiss();
-                }
-            });
-            alertDialog = builder.create();
-            alertDialog.show();
-        }catch (Exception ex){
-            Toast.makeText(getBaseContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+        if (this.lastBackPressTime < System.currentTimeMillis() - 4000) {
+            toast = Toast.makeText(this, "Pressione o botão voltar novamente para fechar este App.", 4000);
+            toast.show();
+            this.lastBackPressTime = System.currentTimeMillis();
+        } else {
+            if (toast != null) {
+                toast.cancel();
+            }
+            finish();
         }
     }
 
@@ -246,6 +245,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     user.setExpiration(TransformaDados.ReturnData(autenticado.getString(Config.TAG_USEREXP), utc));
                     user.setUser(autenticado.getString(Config.TAG_USER));
                     user.setMessage(autenticado.getString(Config.TAG_USERMSG));
+                    user.setId_Filial(filial.getInt(filial.getColumnIndexOrThrow(CriaBanco.ID_FILIAL)));
 
                     bc.insereUsuario(user);
 

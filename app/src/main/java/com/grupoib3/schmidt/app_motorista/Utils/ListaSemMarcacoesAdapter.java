@@ -17,7 +17,7 @@ public class ListaSemMarcacoesAdapter extends RecyclerView.Adapter<ListaSemMarca
     List<String> _sMarc;
     public ListaSemMarcacoesAdapter() {
         _sMarc = new ArrayList<>();
-        _sMarc.add("Não há marcações nesta filial");
+        _sMarc.add("Não existem viagens nesta filial");
     }
 
     @NonNull

@@ -103,4 +103,7 @@
 
     <string name="pref_title_vibrate">Vibrar</string>
     <string name="notifica_es">Notificações</string>
+    <string name="digite_seu_cpf">Digite seu CPF</string>
+    <string name="digite_dt_de_nasc">Digite Dt de Nasc</string>
+    <string name="voltar">Voltar</string>
 </resources>

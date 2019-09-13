@@ -31,7 +31,7 @@
                 android:layout_marginRight="90dp"
                 android:layout_marginStart="90dp"
                 android:layout_marginTop="24dp"
-                android:text="Não existe marcação em espera"
+                android:text="Não existe viagem em aberto no momento"
                 android:textAlignment="center"
                 android:textSize="14sp"
                 android:textStyle="bold|italic"

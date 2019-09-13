@@ -28,6 +28,7 @@ public class CriaBanco extends SQLiteOpenHelper{
     public static final String MESSAGE = "MESSAGE";
     public static final String USUARIO = "USER";
     public static final String FCMTOKEN = "FCMTOKEN";
+    public static final String ID_FILIAL_FK = "ID_FILIAL";
 
 
     //Campos da tabela Filiais
@@ -42,12 +43,12 @@ public class CriaBanco extends SQLiteOpenHelper{
 
     //Campos da tabela Notification
     public static final String ID_NOTIFI = "ID";
-    public static final String ID_USER_PK = "ID_USUARIO";
-    public static final String ID_FILIAL_PK = "ID_FILIAL";
+    public static final String ID_USER_FK = "ID_USUARIO";
     public static final String DATE_NOTIFI = "DATA_NOTIFICACAO";
     public static final String TITLE_NOTIFI = "TITULO_NOTIFICACAO";
     public static final String MSG_NOTIFI = "MSG_NOTIFICACAO";
     public static final String STATUS_NOTIFI = "STATUS_NOTIFICACAO";
+    public static final String URL_NOTIFI = "URL_NOTIFICACAO";
 
     //Versao do banco
     public static final int VERSAO = 2;
@@ -59,8 +60,9 @@ public class CriaBanco extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        String Sql = "CREATE TABLE " + TABELA[0] + " ( " +
+        String user = "CREATE TABLE " + TABELA[0] + " ( " +
                 ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                ID_FILIAL_FK + " INTEGER, " +
                 CGC + " TEXT, " +
                 DTNASC + " TEXT, " +
                 AUTH + " INT, " +
@@ -69,14 +71,15 @@ public class CriaBanco extends SQLiteOpenHelper{
                 ACCESSTOKEN + " TEXT, " +
                 MESSAGE + " TEXT, " +
                 USUARIO + " TEXT, " +
-                FCMTOKEN + " TEXT" +
+                FCMTOKEN + " TEXT, " +
+                "FOREIGN KEY(" + ID_FILIAL_FK + ") REFERENCES " + TABELA[2] + "( " + ID_FILIAL +" )" +
                 ")";
 
         String filial = "CREATE TABLE " + TABELA[2] + " ( " +
                 ID_FILIAL + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 COD_FILIAL + " TEXT NOT NULL, " +
-                NOME_FILIAL + " TEXT NOT NULL," +
-                LOCAL_FILIAL + " TEXT NOT NULL," +
+                NOME_FILIAL + " TEXT NOT NULL, " +
+                LOCAL_FILIAL + " TEXT NOT NULL, " +
                 URL_FILIAL + " TEXT NOT NULL, " +
                 UTC_FILIAL + " TEXT NOT NULL, " +
                 STATUS_FILIAL + " INT, " +
@@ -84,17 +87,22 @@ public class CriaBanco extends SQLiteOpenHelper{
                 ")";
 
         String notifi = "CREATE TABLE " + TABELA[1] + " ( " +
-                ID_NOTIFI + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                ID_FILIAL_PK + " INTEGER NOT NULL, " +
-                ID_USER_PK + " INTEGER NOT NULL," +
-                DATE_NOTIFI + " TEXT NOT NULL," +
+                ID_NOTIFI + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                ID_FILIAL_FK + " INTEGER NOT NULL, " +
+                ID_USER_FK + " INTEGER NOT NULL, " +
+                DATE_NOTIFI + " TEXT NOT NULL, " +
                 TITLE_NOTIFI + " TEXT NOT NULL, " +
                 MSG_NOTIFI + " TEXT NOT NULL, " +
-                STATUS_NOTIFI + " INT " +
+                STATUS_NOTIFI + " INT, " +
+                URL_NOTIFI + " TEXT, " +
+                "FOREIGN KEY(" + ID_FILIAL_FK + ") REFERENCES " + TABELA[2] + "( " + ID_FILIAL +" ), " +
+                "FOREIGN KEY(" + ID_USER_FK + ") REFERENCES " + TABELA[0] + "( " + ID_USER_FK +" )" +
                 ")";
 
-        db.execSQL(Sql);
         db.execSQL(filial);
+
+        db.execSQL(user);
+
         db.execSQL(notifi);
 
         insertFiliais(db);

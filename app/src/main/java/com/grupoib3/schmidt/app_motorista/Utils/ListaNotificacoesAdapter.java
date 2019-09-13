@@ -42,18 +42,21 @@ public class ListaNotificacoesAdapter extends RecyclerView.Adapter<ListaNotifica
                     try {
                         int pos = vh.getAdapterPosition();
                         Notificacao notificacao = Notificacoes.get(pos);
-                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        builder.setTitle(notificacao.getTitulo_notificacao());
-                        builder.setMessage(notificacao.getMsg_notificacao());
-                        builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
+                        if(notificacao.getUrl() == null){
+                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                            builder.setTitle(notificacao.getTitulo_notificacao());
+                            builder.setMessage(notificacao.getMsg_notificacao());
+                            builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
 
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+                        }
+
                         mClicarItem.itemClicado(notificacao);
                     }catch (Exception e){
                         throw e;
