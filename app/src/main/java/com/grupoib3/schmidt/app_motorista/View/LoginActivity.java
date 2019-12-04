@@ -171,12 +171,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     String mes = txtDtNasc.getText().toString().substring(2,4);
                     String dia = txtDtNasc.getText().toString().substring(0,2);
                     String converted = txtCpf.getText().toString().replace(".","").replace("-", "") + ":" + ano + mes + dia;
-
-                    Cursor uCursos = bc.carregaUserByCgc(txtCpf.getText().toString());
-                    uCursos.moveToFirst();
-
                     user = new Usuario();
-                    user.setId(uCursos.getColumnIndexOrThrow(CriaBanco.ID));
+                    Cursor uCursos = bc.carregaUserByCgc(txtCpf.getText().toString());
+                    if(uCursos.moveToFirst()){
+                        user.setId(uCursos.getInt(uCursos.getColumnIndexOrThrow(CriaBanco.ID)));
+                    }
+
                     user.setCgc(txtCpf.getText().toString());
                     user.setDtNasc(txtDtNasc.getText().toString());
                     user.setFCMToken(FirebaseInstanceId.getInstance().getToken());
