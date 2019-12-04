@@ -24,6 +24,7 @@ import com.grupoib3.schmidt.app_motorista.Utils.UsuarioServices;
 import org.json.JSONObject;
 
 import java.text.ParseException;
+import java.util.Date;
 
 public class MarcacaoFragment extends Fragment {
 
@@ -142,6 +143,11 @@ public class MarcacaoFragment extends Fragment {
                 Cursor cursor = bd.carregaFilialById(user.getId_Filial());
                 String url = cursor.getString(cursor.getColumnIndexOrThrow(CriaBanco.URL_FILIAL)) + Config.URL_Marcacao;
                 String s = rh.getJSONFromAPI(url, "", "GET", user.getAccessToken());
+                if(s.equals("HTTP_UNAUTHORIZED")){
+                    s = "";
+                    Date atualdata = new Date();
+                    user.setExpiration(atualdata);
+                }
                 return s;
             }
 

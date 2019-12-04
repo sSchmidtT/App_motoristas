@@ -58,7 +58,7 @@ public class MySettingsActivity extends PreferenceActivity {
             e.printStackTrace();
         }
         bd = new BancoController(this);
-        filial = bd.carregaURLFilialByStatus();
+        filial  = bd.carregaFilialById(user.getId_Filial());
         if(filial.moveToFirst())
             _filial = filial.getString(filial.getColumnIndexOrThrow(CriaBanco.LOCAL_FILIAL));
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferenceFragment()).commit();

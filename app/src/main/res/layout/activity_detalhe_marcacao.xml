@@ -18,7 +18,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="24dp"
             android:text=""
-            android:textSize="18sp"
+            android:textSize="@dimen/txt_18"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -34,7 +34,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text=""
-            android:textSize="24sp"
+            android:textSize="@dimen/txt_24"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +50,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text=""
-            android:textSize="18sp"
+            android:textSize="@dimen/txt_18"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -64,7 +64,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="Nota:"
-            android:textSize="18sp"
+            android:textSize="@dimen/txt_18"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/status" />
@@ -77,7 +77,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text=""
-            android:textSize="18sp"
+            android:textSize="@dimen/txt_18"
             app:layout_constraintStart_toEndOf="@+id/lblNota"
             app:layout_constraintTop_toBottomOf="@+id/status" />
 
@@ -89,7 +89,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="Série:"
-            android:textSize="18sp"
+            android:textSize="@dimen/txt_18"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/lblDescNota"
             app:layout_constraintTop_toBottomOf="@+id/status" />
@@ -102,7 +102,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text=""
-            android:textSize="18sp"
+            android:textSize="@dimen/txt_18"
             app:layout_constraintStart_toEndOf="@+id/Serie"
             app:layout_constraintTop_toBottomOf="@+id/status" />
 
@@ -114,7 +114,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="Placa:"
-            android:textSize="18sp"
+            android:textSize="@dimen/txt_18"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lblNota" />
@@ -127,7 +127,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text=""
-            android:textSize="18sp"
+            android:textSize="@dimen/txt_18"
             app:layout_constraintStart_toEndOf="@+id/Placa"
             app:layout_constraintTop_toBottomOf="@+id/Serie" />
 
@@ -139,7 +139,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="Motorista:"
-            android:textSize="18sp"
+            android:textSize="@dimen/txt_18"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Placa" />
@@ -152,7 +152,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text=""
-            android:textSize="18sp"
+            android:textSize="@dimen/txt_18"
             app:layout_constraintStart_toEndOf="@+id/Motorista"
             app:layout_constraintTop_toBottomOf="@+id/lblDescPlaca" />
 
@@ -164,7 +164,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="Data/Hora Marc.:"
-            android:textSize="18sp"
+            android:textSize="@dimen/txt_18"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Motorista" />
@@ -177,7 +177,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text=""
-            android:textSize="18sp"
+            android:textSize="@dimen/txt_18"
             app:layout_constraintStart_toEndOf="@+id/DHMarc"
             app:layout_constraintTop_toBottomOf="@+id/lblDescMotorista" />
 
@@ -189,7 +189,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="Data/Hora Lib.:"
-            android:textSize="18sp"
+            android:textSize="@dimen/txt_18"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/DHMarc" />
@@ -202,7 +202,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text=""
-            android:textSize="18sp"
+            android:textSize="@dimen/txt_18"
             app:layout_constraintStart_toEndOf="@+id/DHLib"
             app:layout_constraintTop_toBottomOf="@+id/lblDHMarc" />
 
@@ -214,7 +214,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="Data/Hora Ret.:"
-            android:textSize="18sp"
+            android:textSize="@dimen/txt_18"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/DHLib" />
@@ -227,7 +227,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text=""
-            android:textSize="18sp"
+            android:textSize="@dimen/txt_18"
             app:layout_constraintStart_toEndOf="@+id/DHRet"
             app:layout_constraintTop_toBottomOf="@+id/lblDHLib" />
 
@@ -239,7 +239,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="24dp"
             android:text="Status:"
-            android:textSize="18sp"
+            android:textSize="@dimen/txt_18"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lblDescDesc" />
@@ -252,7 +252,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="24dp"
             android:text=""
-            android:textSize="18sp"
+            android:textSize="@dimen/txt_18"
             app:layout_constraintStart_toEndOf="@+id/status"
             app:layout_constraintTop_toBottomOf="@+id/lblDescDesc" />
     </androidx.constraintlayout.widget.ConstraintLayout>

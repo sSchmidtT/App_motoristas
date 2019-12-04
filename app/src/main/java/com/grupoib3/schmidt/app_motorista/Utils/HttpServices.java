@@ -59,6 +59,7 @@ public class HttpServices {
 
             // Instala o verificador de host totalmente confiável
             HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+
             URL apiEnd = new URL(url);
             int codigoResposta;
             HttpURLConnection conexao;
@@ -113,16 +114,16 @@ public class HttpServices {
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            return e.getMessage();
+            //return e.getMessage();
         }catch (IOException e){
             e.printStackTrace();
-            return e.getMessage();
+            //return e.getMessage();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-            return e.getMessage();
+            //return e.getMessage();
         } catch (KeyManagementException e) {
             e.printStackTrace();
-            return e.getMessage();
+            //return e.getMessage();
         }
 
         return retorno;

@@ -198,6 +198,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     String key = Base64.encodeToString(token.getBytes(), Base64.DEFAULT);
                     JSONObject json = new JSONObject();
                     try {
+                        json.put("tipo", "LOGAR");
                         json.put("key", key);
                         json.put("FCMToken", user.getFCMToken());
                     } catch (JSONException e) {
@@ -254,7 +255,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     //LoginActivity.this, MainActivity.class));
 
                     Intent intent = new Intent(this.getBaseContext(), MainActivity.class);
-                    intent.putExtra("userID", user.getId());
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("userId", user.getId());
+                    bundle.putSerializable("userIdFilial", user.getId_Filial());
+                    intent.putExtras(bundle);
                     this.startActivity(intent);
                     finish();
 

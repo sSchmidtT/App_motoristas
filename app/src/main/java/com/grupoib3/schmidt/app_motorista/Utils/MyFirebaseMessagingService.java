@@ -5,14 +5,18 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.media.AudioAttributes;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import androidx.core.app.NotificationCompat;
 import android.util.Log;
@@ -22,6 +26,7 @@ import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.grupoib3.schmidt.app_motorista.Config.Config;
 import com.grupoib3.schmidt.app_motorista.Models.Notificacao;
 import com.grupoib3.schmidt.app_motorista.Models.Usuario;
 import com.grupoib3.schmidt.app_motorista.R;
@@ -139,7 +144,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         bd.InsereNotification(notifi);
 
         Intent intent = new Intent(this, NotificationActivity.class);
-        intent.putExtra("userID", user.getId());
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("userId", user.getId());
+        bundle.putSerializable("userIdFilial", user.getId_Filial());
+        intent.putExtras(bundle);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
@@ -342,7 +350,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             //Intent intent = new Intent(this, WebActivity.class);
             //intent.putExtra("url", url);
             Intent intent = new Intent(this, NotificationActivity.class);
-            intent.putExtra("userID", user.getId());
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("userId", user.getId());
+            bundle.putSerializable("userIdFilial", user.getId_Filial());
+            intent.putExtras(bundle);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                     PendingIntent.FLAG_ONE_SHOT);
@@ -425,13 +436,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void sendDataNotification(RemoteMessage remoteMessage) {
         String body = remoteMessage.getData().get("body");
         String title = remoteMessage.getData().get("title");
-
+        String cod  = remoteMessage.getData().get("codMarc") != null ? remoteMessage.getData().get("codMarc"): "";
         BancoController bd = new BancoController(getBaseContext());
         Usuario user = new Usuario();
         try {
             user = UsuarioServices.LoginMotorista(getBaseContext());
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+
+        if(!cod.equals("")){
+            getJson(bd, user, cod);
         }
         Date dNow = new Date( );
         SimpleDateFormat ft =
@@ -448,7 +463,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         bd.InsereNotification(notifi);
 
         Intent intent = new Intent(this, NotificationActivity.class);
-        intent.putExtra("userID", user.getId());
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("userId", user.getId());
+        bundle.putSerializable("userIdFilial", user.getId_Filial());
+        intent.putExtras(bundle);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
@@ -479,25 +497,28 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                                 .setContentIntent(pendingIntent)
                                 .setColor(R.color.colorPrimary);
 
-                NotificationChannel channel = new NotificationChannel(channelId,
+                @SuppressLint("WrongConstant") NotificationChannel channel = new NotificationChannel(channelId,
                         "Mpark Motorista",
-                        NotificationManager.IMPORTANCE_HIGH);
+                        NotificationManager.IMPORTANCE_MAX);
                 channel.setDescription(body);
                 channel.enableLights(true);
                 channel.setLightColor(Color.BLUE);
                 channel.setShowBadge(true);
                 if(!ring.equals("")){
-                    channel.setSound(sound, null);
+                    AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                            .setUsage(AudioAttributes.USAGE_ALARM)
+                            .build();
+                    channel.setSound(sound, audioAttributes);
                 }else
                     channel.setSound(null, null);
                 if(notificate_vibrate){
                     channel.setVibrationPattern(new long[] { 0, 10, 5, 15});
                     channel.enableVibration(true);
+                    notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
                 }else
                     channel.enableVibration(false);
 
-
-                Uri teste = channel.getSound();
                 notificationManager.createNotificationChannel(channel);
                 notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
 
@@ -517,11 +538,38 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 if(!ring.equals(""))
                     notificationBuilder.setSound(sound);
                 if(notificate_vibrate)
-                    notificationBuilder.setVibrate(new long[] { 0, 1000, 500, 1000});
+                    notificationBuilder.setVibrate(new long[] { 0, 10, 5, 15});
 
                 notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
             }
         }
 
+    }
+
+    public void getJson(BancoController bd, Usuario user, String cCodMarc){
+        class GetJson extends AsyncTask<Void, Void, String> {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+                HttpServices rh = new HttpServices();
+                Cursor cursor = bd.carregaFilialById(user.getId_Filial());
+                String url = cursor.getString(cursor.getColumnIndexOrThrow(CriaBanco.URL_FILIAL)) + Config.URL_ATTNOTIFI + "?cCodMarc=" + cCodMarc;
+                String s = rh.getJSONFromAPI(url, "", "GET", user.getAccessToken());
+                return s;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+
+            }
+        }
+        GetJson gj = new GetJson();
+        gj.execute();
     }
 }

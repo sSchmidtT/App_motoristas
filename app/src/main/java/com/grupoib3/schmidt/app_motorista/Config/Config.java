@@ -9,6 +9,7 @@ public class Config {
     public static final String URL_GetUser = "Autenticacao";
     public static final String URL_Marcacao = "Marcacao";
     public static final String URL_FILIAIS = "AtualizaFiliais";
+    public static final String URL_ATTNOTIFI = "AtualizaNotifi";
 
     //keys for send and request script
     public static final String KEY_ID = "id";

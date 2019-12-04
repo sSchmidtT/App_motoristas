@@ -29,6 +29,7 @@ public class UsuarioServices {
     private static String JSON_STRING;
     private static BancoController dbController;
     private static String utc;
+    private static String cTipo;
 
     public static Usuario LoginMotorista(Context context) throws ParseException {
         try{
@@ -60,6 +61,7 @@ public class UsuarioServices {
                 Date atualdata = new Date();
 
                 if(atualdata.compareTo(user.getExpiration()) == 1){
+                    cTipo = "LOGAR";
                     getJson();
                 }
                 return user;
@@ -101,6 +103,8 @@ public class UsuarioServices {
                     user.setAccessToken("");
                     user.setFCMToken("");
                     ret = dbController.insereUsuario(user);
+                    cTipo = "DESLOGAR";
+                    getJson();
                 }while (cursor.moveToNext());
                 cursor.close();
                 return ret;
@@ -122,47 +126,53 @@ public class UsuarioServices {
 
             @Override
             protected String doInBackground(Void... params) {
-                HttpServices rh = new HttpServices();
-                String ano = user.getDtNasc().toString().substring(4,8);
-                String mes = user.getDtNasc().toString().substring(2,4);
-                String dia = user.getDtNasc().toString().substring(0,2);
-                String converted = user.getCgc().toString().replace(".","").replace("-", "") + ":" + ano + mes + dia;
+                try{
+                    HttpServices rh = new HttpServices();
+                    String ano = user.getDtNasc().toString().substring(4,8);
+                    String mes = user.getDtNasc().toString().substring(2,4);
+                    String dia = user.getDtNasc().toString().substring(0,2);
+                    String converted = user.getCgc().toString().replace(".","").replace("-", "") + ":" + ano + mes + dia;
 
-                if(!user.getFCMToken().equals(FirebaseInstanceId.getInstance().getToken()))
-                    user.setFCMToken(FirebaseInstanceId.getInstance().getToken());
+                    if(!user.getFCMToken().equals(FirebaseInstanceId.getInstance().getToken()))
+                        user.setFCMToken(FirebaseInstanceId.getInstance().getToken());
 
-                int[] iKey = new int[converted.length()];
-                Random rand = new Random();
-                for(int i = 0; i < converted.length(); i++){
-                    iKey[i] = rand.nextInt((5 - 1) + 1) + 1;
-                }
-                String token = converted.length() + "-";
-                for(int i = 0; i < iKey.length; i++){
-                    token += iKey[i];
-                }
-
-                for(int i = 0; i < converted.length(); i++){
-                    String p = "";
-                    for(int j = 0; j < iKey[i]; j++){
-                        p += rand.nextInt((9 - 1) + 1) + 1;
+                    int[] iKey = new int[converted.length()];
+                    Random rand = new Random();
+                    for(int i = 0; i < converted.length(); i++){
+                        iKey[i] = rand.nextInt((5 - 1) + 1) + 1;
                     }
-                    token += p + converted.charAt(i);
-                }
+                    String token = converted.length() + "-";
+                    for(int i = 0; i < iKey.length; i++){
+                        token += iKey[i];
+                    }
 
-                String key = Base64.encodeToString(token.getBytes(), Base64.DEFAULT);
-                JSONObject json = new JSONObject();
-                try {
-                    json.put("key", key);
-                    json.put("FCMToken", user.getFCMToken());
-                } catch (JSONException e) {
+                    for(int i = 0; i < converted.length(); i++){
+                        String p = "";
+                        for(int j = 0; j < iKey[i]; j++){
+                            p += rand.nextInt((9 - 1) + 1) + 1;
+                        }
+                        token += p + converted.charAt(i);
+                    }
+
+                    String key = Base64.encodeToString(token.getBytes(), Base64.DEFAULT);
+                    JSONObject json = new JSONObject();
+                    try {
+                        json.put("tipo", cTipo);
+                        json.put("key", key);
+                        json.put("FCMToken", user.getFCMToken());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    Cursor cursor = dbController.carregaFilialById(user.getId_Filial());
+                    String url = cursor.getString(cursor.getColumnIndexOrThrow(CriaBanco.URL_FILIAL)) + Config.URL_GetUser;
+                    utc = cursor.getString(cursor.getColumnIndexOrThrow(CriaBanco.UTC_FILIAL));
+
+                    String s = rh.getJSONFromAPI(url, json.toString(), "POST", "");
+                    return s;
+                }catch (Exception e){
                     e.printStackTrace();
+                    throw e;
                 }
-                Cursor cursor = dbController.carregaFilialById(user.getId_Filial());
-                String url = cursor.getString(cursor.getColumnIndexOrThrow(CriaBanco.URL_FILIAL)) + Config.URL_GetUser;
-                utc = cursor.getString(cursor.getColumnIndexOrThrow(CriaBanco.UTC_FILIAL));
-
-                String s = rh.getJSONFromAPI(url, json.toString(), "POST", "");
-                return s;
             }
 
             @Override
@@ -204,8 +214,6 @@ public class UsuarioServices {
         }catch (Exception e){
             e.printStackTrace();
         }
-
-
     }
 
 }

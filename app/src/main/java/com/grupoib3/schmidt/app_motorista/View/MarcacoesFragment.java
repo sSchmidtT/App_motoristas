@@ -32,6 +32,7 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -124,6 +125,11 @@ public class MarcacoesFragment extends Fragment {
                     Cursor cursor = bd.carregaFilialById(user.getId_Filial());
                     String url = cursor.getString(cursor.getColumnIndexOrThrow(CriaBanco.URL_FILIAL)) + Config.URL_Display;
                     String s = rh.getJSONFromAPI(url, "", "GET", user.getAccessToken());
+                    if(s.equals("HTTP_UNAUTHORIZED")){
+                        s = "";
+                        Date atualdata = new Date();
+                        user.setExpiration(atualdata);
+                    }
                     return s;
                 }catch (Exception ex){
                     throw ex;
@@ -232,6 +238,7 @@ public class MarcacoesFragment extends Fragment {
             swiping = false;
         }catch (Exception e){
             e.printStackTrace();
+            progressDialog.dismiss();
         }
 
     }

@@ -51,7 +51,7 @@ public class CriaBanco extends SQLiteOpenHelper{
     public static final String URL_NOTIFI = "URL_NOTIFICACAO";
 
     //Versao do banco
-    public static final int VERSAO = 2;
+    public static final int VERSAO = 7;
 
     public CriaBanco(Context context) {
         super(context, NOME_BANCO, null, VERSAO);
@@ -126,6 +126,16 @@ public class CriaBanco extends SQLiteOpenHelper{
             filiais.put(CriaBanco.LOCAL_FILIAL, "Itaituba/PA");
             filiais.put(CriaBanco.URL_FILIAL, "https://mparkm5.postomirian.com.br/AppMotoristas/Api/");
             filiais.put(CriaBanco.UTC_FILIAL, "America/Belem");
+            filiais.put(CriaBanco.STATUS_FILIAL, 0);
+            filiais.put(CriaBanco.ATIVO_FILIAL, 1);
+            db.insert(CriaBanco.TABELA[2], null, filiais);
+
+            filiais = new ContentValues();
+            filiais.put(CriaBanco.COD_FILIAL, "500502");
+            filiais.put(CriaBanco.NOME_FILIAL, "Mpark Estacionamento");
+            filiais.put(CriaBanco.LOCAL_FILIAL, "Candeias do Jamari TST/RO");
+            filiais.put(CriaBanco.URL_FILIAL, "https://mparkm4.postomirian.com.br/Teste-AppMotoristas/Api/");
+            filiais.put(CriaBanco.UTC_FILIAL, "America/Porto_Velho");
             filiais.put(CriaBanco.STATUS_FILIAL, 0);
             filiais.put(CriaBanco.ATIVO_FILIAL, 1);
             db.insert(CriaBanco.TABELA[2], null, filiais);
